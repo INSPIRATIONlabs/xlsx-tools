@@ -1,0 +1,21 @@
+{
+  "name": "xslx_tools",
+  "version": "0.0.1",
+  "description": "Helper module for creating and parsing xlsx files, based on xlsx",
+  "main": "index.js",
+  "dependencies": {
+    "xlsx": ">=0.0.1",
+    "lodash": ">=0.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "xlsx",
+    "excel",
+    "mlcl",
+    "molecuel"
+  ],
+  "author": "Alexander Knapstein",
+  "license": "MIT"
+}
