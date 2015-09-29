@@ -10,6 +10,12 @@ var worksheet = (function () {
         this.data = {};
         this.name = name;
     }
+    worksheet.prototype.datenum = function (v, date1904) {
+        if (date1904)
+            v += 1462;
+        var epoch = Date.parse(v);
+        return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+    };
     worksheet.prototype.setHeader = function (arr) {
         var _this = this;
         _.each(arr, function (item) {
@@ -43,7 +49,6 @@ var worksheet = (function () {
     };
     worksheet.prototype.setCell = function (R, C, cell) {
         var ws = {};
-        console.log(cell);
         if (this.range.s.r > R)
             this.range.s.r = R;
         if (this.range.s.c > C)
@@ -58,8 +63,16 @@ var worksheet = (function () {
                 cell.t = 'n';
             else if (typeof cell.v === 'boolean')
                 cell.t = 'b';
-            else
+            else if (cell.v instanceof Date) {
+                cell.t = 'n';
+                if (cell.z == null) {
+                    cell.z = XLSX.SSF._table[14];
+                }
+                cell.v = this.datenum(cell.v);
+            }
+            else {
                 cell.t = 's';
+            }
             this.data[cell_ref] = cell;
         }
     };
