@@ -30,22 +30,24 @@ var worksheet = (function () {
     };
     worksheet.prototype.addRow = function (row) {
         var _this = this;
-        if (this.headerColumns) {
+        if (this.headerColumns.length) {
             _.each(this.headerColumns, function (col) {
-                var item = row[col];
-                var cell;
-                if (typeof item === 'object' && item.v !== "undefined") {
-                    cell = item;
-                }
-                else {
-                    cell = { v: item };
-                }
+                var cell = row[col];
                 _this.setCell(_this.R, _this.C, cell);
                 _this.C++;
             });
-            this.R++;
-            this.C = 0;
         }
+        else {
+            _.each(row, function (cell) {
+                _this.setCell(_this.R, _this.C, cell);
+                _this.C++;
+            });
+        }
+        this.R++;
+        this.C = 0;
+    };
+    worksheet.prototype.encodeCell = function (obj) {
+        return XLSX.utils.encode_cell(obj);
     };
     worksheet.prototype.setCell = function (R, C, cell) {
         var ws = {};
@@ -57,22 +59,31 @@ var worksheet = (function () {
             this.range.e.r = R;
         if (this.range.e.c < C)
             this.range.e.c = C;
+        var cell_ref = this.encodeCell({ c: C, r: R });
+        if (!_.isObject(cell)) {
+            cell = { v: cell };
+        }
         if (cell.v != null) {
-            var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
-            if (typeof cell.v === 'number')
-                cell.t = 'n';
-            else if (typeof cell.v === 'boolean')
-                cell.t = 'b';
-            else if (cell.v instanceof Date) {
+            if (cell.v instanceof Date) {
                 cell.t = 'n';
                 if (cell.z == null) {
                     cell.z = XLSX.SSF._table[14];
                 }
                 cell.v = this.datenum(cell.v);
             }
-            else {
+            else if (typeof cell.v === 'number') {
+                cell.t = 'n';
+            }
+            else if (typeof cell.v === 'boolean') {
+                cell.t = 'b';
+            }
+            else if (!cell.t) {
                 cell.t = 's';
             }
+            this.data[cell_ref] = cell;
+        }
+        else if (cell.f != null) {
+            cell.t = 'f';
             this.data[cell_ref] = cell;
         }
     };

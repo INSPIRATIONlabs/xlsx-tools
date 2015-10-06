@@ -1,6 +1,6 @@
 {
   "name": "xlsx-tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Helper module for creating and parsing xlsx files, based on xlsx",
   "main": "index.js",
   "dependencies": {
