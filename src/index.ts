@@ -1,11 +1,7 @@
-/// <reference path="./typings/node/node.d.ts"/>
-/// <reference path="./typings/lodash/lodash.d.ts"/>
-/// <reference path="./typings/xlsx/xlsx.d.ts"/>
-
 import _ = require('lodash');
 import XLSX = require('xlsx');
 
-class worksheet {
+export class worksheet {
   protected name:string;
   protected headerColumns = [];
   protected rows = [];
@@ -18,10 +14,12 @@ class worksheet {
     this.name = name;
   }
 
-  public datenum(v, date1904) {
+  public datenum(v, date1904?): any {
   	if(date1904) v+=1462;
-  	var epoch = Date.parse(v);
-  	return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+  	var epoch:any = Date.parse(v);
+    let calcdate:any = new Date(Date.UTC(1899, 11, 30));
+    let returnval:any = (epoch - calcdate) / (24 * 60 * 60 * 1000);
+  	return returnval;
   }
 
   public setHeader(arr) {
@@ -39,7 +37,7 @@ class worksheet {
   public addRow(row:any) {
     if(this.headerColumns.length) {
       _.each(this.headerColumns, (col) => {
-        var cell = row[col];
+        var cell: any = row[col];
         this.setCell(this.R, this.C, cell);
         this.C++;
       });
@@ -96,7 +94,7 @@ class worksheet {
   }
 }
 
-class workbook {
+export class workbook {
   protected worksheets = [];
 
   public addSheet(worksheet) {
@@ -118,7 +116,7 @@ class workbook {
     return output;
   }
 
-  public download(res, filename) {
+  public download(res, filename?) {
     var wbout = this.write();
     res.type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.attachment(filename);
@@ -126,7 +124,7 @@ class workbook {
   }
 }
 
-class xslx_tools {
+export class xslxtools {
 
   public xlsx_tools() {
 
@@ -140,10 +138,7 @@ class xslx_tools {
     return new worksheet(name);
   }
 
-  public static init(m):xslx_tools {
-    return new xslx_tools();
+  public static init(m):xslxtools {
+    return new xslxtools();
   }
-
 }
-
-export = xslx_tools;

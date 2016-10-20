@@ -1,0 +1,6 @@
+npm-debug.log
+src
+.vscode
+.travis.yml
+typings
+typings_override
