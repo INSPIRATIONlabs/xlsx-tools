@@ -1,6 +1,7 @@
 "use strict";
-const _ = require('lodash');
-const XLSX = require('xlsx');
+Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
+const XLSX = require("@inspirationlabs/js-xlsx");
 class worksheet {
     constructor(name) {
         this.headerColumns = [];

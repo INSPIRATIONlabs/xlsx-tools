@@ -1,5 +1,5 @@
 import _ = require('lodash');
-import XLSX = require('xlsx');
+import XLSX = require('@inspirationlabs/js-xlsx');
 
 export class worksheet {
   protected name:string;
